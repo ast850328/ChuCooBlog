@@ -104,7 +104,7 @@ app.get('/posts/:id', function (req, res) {
 
 // require login
 // usr -> user basic profile (exclude password)
-var usr;
+var usr = null;
 // check cookie
 app.use(function(req, res, next) {
   var cookieID = req.cookies.NODEJSSESSIONID;
