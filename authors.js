@@ -2,6 +2,7 @@ const express = require('express');
 var authors = express.Router();
 const model = require('./model.js');
 
+const jsonfile = require('jsonfile');
 let users = require('./users.json');
 const usersfile = './users.json';
 

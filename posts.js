@@ -1,15 +1,21 @@
 const express = require('express');
-var posts = express.Router();
+var article = express.Router();
 const model = require('./model.js');
 
-let users = require('./users.json');
-const usersfile = './users.json';
+const jsonfile = require('jsonfile');
 
-posts.get('/', function (req, res) {
+let users = require('./users.json');
+let posts = require('./posts.json');
+
+const usersfile = './users.json';
+const postsfile = './posts.json';
+
+
+article.get('/', function (req, res) {
   res.send(posts);
 });
 
-posts.get('/:id', function (req, res) {
+article.get('/:id', function (req, res) {
   var id = parseInt(req.params.id);
   var i = 0;
   for (i = 0; i < posts.length; i++) {
@@ -28,7 +34,7 @@ posts.get('/:id', function (req, res) {
 
 var usr = null;
 
-posts.use(function (req, res, next) {
+article.use(function (req, res, next) {
   usr = model.checkLogin(req);
     if (!usr)
       return res.status(401).json({
@@ -37,7 +43,7 @@ posts.use(function (req, res, next) {
     next();
 });
 
-posts.post('/', function (req, res) {
+article.post('/', function (req, res) {
   if (!req.body.title) {
     res.status(400).json({
       message: "title 必填"
@@ -55,6 +61,7 @@ posts.post('/', function (req, res) {
     content = req.body.content;
     tags = req.body.tags;
     var id = new Date().valueOf();
+    var date = new Date();
     var post = {
       id: id,
       title: title,
@@ -71,11 +78,12 @@ posts.post('/', function (req, res) {
   }
 });
 
-posts.patch('/:id', function (req, res) {
+article.patch('/:id', function (req, res) {
   title = req.body.title;
   content = req.body.content;
   tags = req.body.tags;
   id = parseInt(req.params.id);
+  let date = new Date();
   var i = 0;
   for (i = 0; i < posts.length; i++) {
     if (id === posts[i].id)
@@ -96,7 +104,7 @@ posts.patch('/:id', function (req, res) {
   }
 });
 
-posts.delete('/:id', function (req, res) {
+article.delete('/:id', function (req, res) {
   id = parseInt(req.params.id);
   var i;
   for (i = 0; i < posts.length; i++) {
@@ -118,4 +126,4 @@ posts.delete('/:id', function (req, res) {
   }
 });
 
-module.exports = posts;
+module.exports = article;
